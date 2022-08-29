@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
-import SearchPage from "./pages/SearchPage";
-import WishListPage from "./pages/WishListPage";
+import SearchPage from "./pages/searchPageComponents/SearchPage";
+import WishListPage from "./pages/WishListComponents/WishListPage";
 import Home from "./pages/Home";
 
 function App() {
