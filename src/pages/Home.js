@@ -1,9 +1,16 @@
 import React from 'react';
+import {GoogleButton} from "react-google-button";
 
 const Home = () => {
+
+  const signIn = () => {
+    console.log("Sign In!!!")
+  }
+
   return (
     <div>
-      Home
+      <h1>Welcome to our application</h1>
+      < GoogleButton onClick={signIn}/>
     </div>
   );
 };
