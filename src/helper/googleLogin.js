@@ -2,13 +2,14 @@ import React from "react";
 import { provider } from "../firebase";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-const googleLogin = () => {
+const googleLogin = async () => {
   const auth = getAuth();
-  signInWithPopup(auth, provider)
+  await signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
+      return "success";
     })
     .catch((error) => {
       const errorCode = error.code;
