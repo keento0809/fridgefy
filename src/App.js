@@ -2,21 +2,19 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import SearchPage from "./pages/searchPageComponents/SearchPage";
 import WishListPage from "./pages/WishListComponents/WishListPage";
-import Home from "./pages/Home";
-import DataProvider from "./helper/DataContext";
+import { UserDataProvider } from "./contexts/users_data";
 
 function App() {
   return (
-    <DataProvider>
+    <UserDataProvider>
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<SearchPage />} />
+          <Route path="/" element={<SearchPage />} />
           <Route path="/wishList" element={<WishListPage />} />
         </Routes>
       </Router>
-    </DataProvider>
+    </UserDataProvider>
   );
 }
 

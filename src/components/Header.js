@@ -66,9 +66,6 @@ const Header = () => {
       </Link>
       <ul>
         <li>
-          <Link to="/search">Recipes</Link>
-        </li>
-        <li>
           <Link to="/WishList">My shopping List</Link>
         </li>
         <li>Hello {userName}</li>

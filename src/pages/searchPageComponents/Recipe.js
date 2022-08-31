@@ -1,40 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import RecipeDetail from "./RecipeDetail";
-import axios from "axios";
+import { UserContext } from "../../contexts/users_data";
 
 const Recipe = ({ name, image }) => {
   const [displayDetail, setDisplayDetail] = useState(false);
-
+  const { userRecipes, setUserRecipes } = useContext(UserContext);
   const displayModal = () => {
     setDisplayDetail(!displayDetail);
   };
 
-  useEffect(() => {
-    // axios
-    //   .get(
-    //     `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY_SPOONACULAR}`
-    //   )
-    //   .then((response) => {
-    //     console.log("recepies", response.data);
-    //   })
-    //   .catch(function (error) {
-    //     console.error(error);
-    //   });
-    // I Moved the Ingredients Axios to ItemsToBuy.js I leave it here just in case you need to see the data
-    //---------------
-    // axios.get("https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=${API_KEY}&query=apples&flour&sugar&number=2").then((res)=>{
-    //   console.log('ingredients',res.data);
-    // }).catch(function (error) {
-    //     console.error(error);
-    //   });
-  }, []);
+  const addMyRecipe = (item) => {
+    setUserRecipes([...userRecipes, { name: item.name, image: item.image }]);
+  };
 
   return (
     <div>
       <h4>{name}</h4>
-      <img src={`${image}`} style={{ width: "20rem" }} alt="" />
+      <img src={image} style={{ width: "20rem" }} alt="" />
       <button onClick={displayModal}>More</button>
-      <button>Add</button>
+      <button onClick={() => addMyRecipe({ name, image })}>Add</button>
       {displayDetail ? <RecipeDetail /> : null}
     </div>
   );
