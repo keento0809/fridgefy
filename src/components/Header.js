@@ -14,7 +14,6 @@ const Header = () => {
     <NavBarStyle>
       < Link to='/'><h1>Fridgefy</h1></Link>
       <ul>
-        <li>< Link to='/search'>Recipes</Link></li>
         <li>< Link to='/WishList'>My shopping List</Link></li>
         <li>Hello {userName}</li>
         { userLogIn? logOutButton : loginButton}
