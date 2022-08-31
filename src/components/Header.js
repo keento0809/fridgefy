@@ -6,9 +6,8 @@ const Header = () => {
 
   const userName = "user"
   const [userLogIn, setUserLogIn] = useState(true)
-
-  const loginButton = <button>Log in</button>
-  const logOutButton = <button>Log out</button>
+  const loginButton = <button onClick={() => {setUserLogIn(!userLogIn)}}>Log in</button>
+  const logOutButton = <button onClick={() => {setUserLogIn(!userLogIn)}}>Log out</button>
 
   return (
     <NavBarStyle>
