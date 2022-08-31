@@ -1,13 +1,11 @@
-import React from 'react'
-import {StyleMyRecepies} from './styles/MyRecepies.styles';
+import React, {useContext} from 'react'
+import { DataContext } from '../helper/DataContext'; 
 
-export default function MyRecepies() {
+const MyRecepies = () => {
+  const { myRecepies } = useContext(DataContext);
   return (
-    <StyleMyRecepies>
-        <div>
-            MyRecepies
-        </div>
-    </StyleMyRecepies>
-
+    <div>MyRecepies</div>
   )
 }
+
+export default MyRecepies
