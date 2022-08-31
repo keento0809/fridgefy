@@ -1,31 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import Recipe from './Recipe';
-import {recipes} from "../../FakeData";
+import axios from "axios";
 
 const SearchMain = () => {
 
+  const [recipeData, setRecipeData] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("pasta");
+
+  const getRecipeData = ingredients => {
+    axios.get(`https://api.spoonacular.com/recipes/findByIngredients?apiKey=${process.env.REACT_APP_API_KEY_SPOONACULAR}&ingredients=${ingredients}`).then((res)=>{
+      setRecipeData(res.data)
+    }).catch(function (error) {
+      console.error(error.message);
+    });
+  }
 
   useEffect(() => {
-    const filteredItems = recipes.filter((item) =>
-      item.name.toLowerCase().indexOf(value) !== -1
+    getRecipeData(value)
+    const filteredItems = recipeData.filter((item) =>
+      item.title.toLowerCase().indexOf(value) !== -1
     )
     setFilteredRecipes(filteredItems)
   }, [value]);
 
-
-  const recipesRender = recipes.map(item =>
+  const recipesRender = recipeData.map(item =>
     < Recipe key={item.id}
-             name={item.name}
+             name={item.title}
              image={item.image}
-    />
-  )
-
-  const filteredRecipeRender = filteredRecipes.map(recipe =>
-    < Recipe key={recipe.id}
-             name={recipe.name}
-             image={recipe.image}
     />
   )
 
@@ -39,10 +41,8 @@ const SearchMain = () => {
           setValue(e.target.value)
         }}
       />
-      <h2>Filtered Area</h2>
-      { ! value ? "Let's start search!!" : filteredRecipeRender }
       <h2>All Recipes</h2>
-      {recipesRender}
+      { recipesRender }
     </main>
   );
 };
