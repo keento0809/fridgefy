@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { NavBarStyle } from "../pages/SearchPage.style";
-import { useNavigate } from "react-router-dom";
 import googleLogin from "../helper/googleLogin";
 import logout from "../helper/logout";
 import { provider } from "../firebase";
@@ -10,16 +9,18 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
+import useDataContext from "../hooks/useDataContext";
 
 const Header = () => {
-  const [userName, setUserName] = useState("user");
-  const [userLogIn, setUserLogIn] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [userLogIn, setUserLogIn] = useState(false);
   const navigate = useNavigate();
+  const auth = getAuth();
+  const { isLoggedIn, setIsLoggedIn } = useDataContext();
 
   const handleLogin = async () => {
-    // googleLogin();
-    // await navigate("/search");
     const auth = getAuth();
     await signInWithPopup(auth, provider)
       .then((result) => {
@@ -27,8 +28,8 @@ const Header = () => {
         const token = credential.accessToken;
         const user = result.user;
         localStorage.setItem("token", user.uid);
-        console.log(user);
         setUserName(user.displayName);
+        setUserLogIn(true);
         navigate("/search");
       })
       .catch((error) => {
@@ -36,17 +37,17 @@ const Header = () => {
         const errorMessage = error.message;
         const email = error.customData.email;
         const credential = GoogleAuthProvider.credentialFromError(error);
-        return;
       });
   };
 
   const handleLogout = async () => {
-    // logout();
-    // await navigate("/");
     const auth = getAuth();
     signOut(auth)
       .then(() => {
         console.log("Logout succeeded");
+        setUserLogIn(false);
+        setIsLoggedIn(false);
+        setUserName("");
         navigate("/");
       })
       .catch((error) => {
@@ -71,7 +72,7 @@ const Header = () => {
           <Link to="/WishList">My shopping List</Link>
         </li>
         <li>Hello {userName}</li>
-        {userLogIn ? logOutButton : loginButton}
+        {isLoggedIn ? logOutButton : loginButton}
       </ul>
     </NavBarStyle>
   );

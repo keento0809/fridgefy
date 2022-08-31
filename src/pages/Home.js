@@ -5,37 +5,40 @@ import { GoogleButton } from "react-google-button";
 import { useNavigate, Navigate } from "react-router-dom";
 import googleLogin from "../helper/googleLogin";
 import { provider } from "../firebase";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+} from "firebase/auth";
+import useDataContext from "../hooks/useDataContext";
 
 const Home = () => {
+  const { isLoggedIn, setIsLoggedIn } = useDataContext();
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState();
+  const auth = getAuth();
+
+  const checkIsLoggedIn = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserName(user.displayName);
+        setIsLoggedIn(true);
+      }
+    });
+  };
 
   const signIn = async () => {
-    googleLogin()
-      .then((res) => console.log(res))
-      .catch((error) => console.log());
-    // const auth = getAuth();
-    // await signInWithPopup(auth, provider)
-    //   .then((result) => {
-    //     const credential = GoogleAuthProvider.credentialFromResult(result);
-    //     const token = credential.accessToken;
-    //     const user = result.user;
-    //     localStorage.setItem("token", user.uid);
-    //     console.log(user);
-    //     setUserName(user.displayName);
-    //     navigate("/search");
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     const email = error.customData.email;
-    //     const credential = GoogleAuthProvider.credentialFromError(error);
-    //     return;
-    //   });
-    // await navigate("/search");
+    googleLogin();
   };
-  if (userName) return <Navigate to="/search" />;
+
+  useEffect(() => {
+    checkIsLoggedIn();
+  }, [signIn]);
+
+  // if (userName) return <Navigate to="/search" />;
+  if (isLoggedIn) return <Navigate to="/search" />;
+
   return (
     <div>
       <h1>Welcome to our application</h1>
