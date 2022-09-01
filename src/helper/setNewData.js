@@ -1,12 +1,12 @@
 import React from "react";
 import { db } from "../firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, setDoc } from "firebase/firestore";
 
-const setNewData = (data,collection) => {
-  const updateRef = doc(db,collection,data);
-  await updateDoc(updateRef,{
-    capital: true
-  })
+const setNewData = async (collection, data) => {
+  await setDoc(doc(db, collection, data.name), {
+    name: data.name,
+    image: data.image,
+  });
 };
 
 export default setNewData;

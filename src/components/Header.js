@@ -11,13 +11,15 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import useDataContext from "../hooks/useDataContext";
+import { UserContext } from "../contexts/users_data";
 
 const Header = () => {
-  const [userName, setUserName] = useState("");
+  // const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const auth = getAuth();
-  const { isLoggedIn, setIsLoggedIn } = useDataContext();
+  const { setUserId, userInfo, setUserInfo, setUserRecipe, setUserFridge } =
+    useContext(UserContext);
+  const { isLoggedIn, username } = userInfo;
 
   const handleLogin = async () => {
     const auth = getAuth();
@@ -27,8 +29,12 @@ const Header = () => {
         const token = credential.accessToken;
         const user = result.user;
         localStorage.setItem("token", user.uid);
-        setUserName(user.displayName);
-        setIsLoggedIn(true);
+        // setUserName(user.displayName);
+        setUserInfo({
+          isLoggedIn: true,
+          userId: user.uid,
+          username: user.displayName,
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -43,8 +49,9 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         console.log("Logout succeeded");
-        setIsLoggedIn(false);
-        setUserName("");
+        setUserInfo({ isLoggedIn: false, userId: "", username: "user" });
+        setUserRecipe([]);
+        setUserFridge([]);
       })
       .catch((error) => {
         console.log(error);
@@ -64,7 +71,7 @@ const Header = () => {
         <li>
           <Link to="/WishList">My shopping List</Link>
         </li>
-        <li>Hello {userName}</li>
+        <li>Hello {username}</li>
         {isLoggedIn ? logOutButton : loginButton}
       </ul>
     </NavBarStyle>

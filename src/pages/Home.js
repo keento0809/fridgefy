@@ -1,16 +1,8 @@
-import { setDoc, doc, collection, query, where } from "firebase/firestore";
-import { db } from "../firebase";
 import React, { useEffect, useState } from "react";
 import { GoogleButton } from "react-google-button";
 import { useNavigate, Navigate } from "react-router-dom";
 import googleLogin from "../helper/googleLogin";
-import { provider } from "../firebase";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import useDataContext from "../hooks/useDataContext";
 
 const Home = () => {
