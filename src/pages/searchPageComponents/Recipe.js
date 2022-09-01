@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import RecipeDetail from "./RecipeDetail";
 import { UserContext, UserDataProvider } from "../../contexts/users_data";
-import setNewData from "../../helper/setNewData";
 import { db } from "../../firebase";
 import { setDoc, doc } from "firebase/firestore";
 
-const Recipe = ({ name, image }) => {
+const Recipe = ({ name, image, missedIngredients }) => {
   const [displayDetail, setDisplayDetail] = useState(false);
   const { userRecipes, setUserRecipes, userInfo } = useContext(UserContext);
   const { userId, isLoggedIn } = userInfo;
@@ -14,12 +13,20 @@ const Recipe = ({ name, image }) => {
   };
 
   const addMyRecipe = async (item) => {
-    setUserRecipes([...userRecipes, { name: item.name, image: item.image }]);
+    setUserRecipes([
+      ...userRecipes,
+      {
+        name: item.name,
+        image: item.image,
+        missedIngredients: missedIngredients,
+      },
+    ]);
     // setNewData("recipes", item);
     await setDoc(doc(db, "recipes", item.name), {
       id: userId,
       name: item.name,
       image: item.image,
+      missedIngredients: item.missedIngredients,
     });
   };
 
