@@ -15,7 +15,6 @@ import useDataContext from "../hooks/useDataContext";
 
 const Header = () => {
   const [userName, setUserName] = useState("");
-  const [userLogIn, setUserLogIn] = useState(false);
   const navigate = useNavigate();
   const auth = getAuth();
   const { isLoggedIn, setIsLoggedIn } = useDataContext();
@@ -29,8 +28,7 @@ const Header = () => {
         const user = result.user;
         localStorage.setItem("token", user.uid);
         setUserName(user.displayName);
-        setUserLogIn(true);
-        navigate("/search");
+        setIsLoggedIn(true);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -45,10 +43,8 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         console.log("Logout succeeded");
-        setUserLogIn(false);
         setIsLoggedIn(false);
         setUserName("");
-        navigate("/");
       })
       .catch((error) => {
         console.log(error);

@@ -3,17 +3,20 @@ import Header from "./components/Header";
 import SearchPage from "./pages/searchPageComponents/SearchPage";
 import WishListPage from "./pages/WishListComponents/WishListPage";
 import { UserDataProvider } from "./contexts/users_data";
+import DataProvider from "./helper/DataContext";
 
 function App() {
   return (
     <UserDataProvider>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<SearchPage />} />
-          <Route path="/wishList" element={<WishListPage />} />
-        </Routes>
-      </Router>
+      <DataProvider>
+        <Router>
+          <Header />
+          <Routes>
+            <Route path="/" element={<SearchPage />} />
+            <Route path="/wishList" element={<WishListPage />} />
+          </Routes>
+        </Router>
+      </DataProvider>
     </UserDataProvider>
   );
 }
