@@ -17,7 +17,6 @@ const SearchMain = () => {
         `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${process.env.REACT_APP_API_KEY_SPOONACULAR}&ingredients=${ingredients}`
       )
       .then((res) => {
-        console.log(res);
         setRecipeData(res.data);
       })
       .catch(function (error) {

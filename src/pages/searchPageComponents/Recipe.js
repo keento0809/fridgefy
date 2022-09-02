@@ -36,7 +36,7 @@ const Recipe = ({ name, image, missedIngredients }) => {
       <img src={image} style={{ width: "20rem" }} alt="" />
       <button onClick={displayModal}>More</button>
       <button
-        onClick={() => addMyRecipe({ name, image })}
+        onClick={() => addMyRecipe({ name, image, missedIngredients })}
         disabled={!isLoggedIn}
       >
         Add

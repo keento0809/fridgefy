@@ -9,16 +9,19 @@ export const UserDataProvider = ({ children }) => {
   });
   const [userFridge, setUserFridge] = useState([]);
   const [userRecipes, setUserRecipes] = useState([]);
+  const [itemsToBuy, setItemsToBuy] = useState([]);
 
   return (
     <UserContext.Provider
       value={{
         userInfo,
-        setUserInfo,
         userFridge,
         userRecipes,
+        itemsToBuy,
+        setUserInfo,
         setUserFridge,
         setUserRecipes,
+        setItemsToBuy,
       }}
     >
       {children}
