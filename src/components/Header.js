@@ -16,8 +16,13 @@ import { UserContext } from "../contexts/users_data";
 const Header = () => {
   const navigate = useNavigate();
   const auth = getAuth();
-  const { userInfo, setUserInfo, setUserRecipes, setUserFridge } =
-    useContext(UserContext);
+  const {
+    userInfo,
+    setUserInfo,
+    setUserRecipes,
+    setUserFridge,
+    setItemsToBuy,
+  } = useContext(UserContext);
   const { isLoggedIn, username } = userInfo;
 
   const handleLogin = async () => {
@@ -50,6 +55,7 @@ const Header = () => {
         setUserInfo({ isLoggedIn: false, userId: "", username: "user" });
         setUserRecipes([]);
         setUserFridge([]);
+        setItemsToBuy([]);
       })
       .catch((error) => {
         console.log(error);

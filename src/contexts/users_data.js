@@ -10,14 +10,17 @@ export const UserDataProvider = ({ children }) => {
   const [userFridge, setUserFridge] = useState([]);
   const [userRecipes, setUserRecipes] = useState([]);
   const [itemsToBuy, setItemsToBuy] = useState([]);
+  const [bool, setBool] = useState(false);
 
   return (
     <UserContext.Provider
       value={{
+        bool,
         userInfo,
         userFridge,
         userRecipes,
         itemsToBuy,
+        setBool,
         setUserInfo,
         setUserFridge,
         setUserRecipes,

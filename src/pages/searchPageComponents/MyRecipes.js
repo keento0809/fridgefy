@@ -11,7 +11,14 @@ import {
 import { db } from "../../firebase";
 
 const MyRecipe = () => {
-  const { userRecipes, setUserRecipes, userInfo } = useContext(UserContext);
+  const {
+    userRecipes,
+    setUserRecipes,
+    userInfo,
+    itemsToBuy,
+    setItemsToBuy,
+    setBool,
+  } = useContext(UserContext);
   const { userId, username, isLoggedIn } = userInfo;
 
   const myRecipeRender = userRecipes.map((item, index) => (
@@ -20,8 +27,20 @@ const MyRecipe = () => {
       <img src={item.image} alt="" />
       <button
         onClick={async () => {
+          setBool(true);
           setUserRecipes(userRecipes.filter((data) => data.id !== item.id));
+          setItemsToBuy(
+            itemsToBuy.filter((data) => data.recipeId !== item.recipeId)
+          );
           await deleteDoc(doc(db, "recipes", item.name));
+          const q = query(
+            collection(db, "itemsToBuy"),
+            where("recipeId", "==", item.recipeId)
+          );
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach(async (docSnapshot) => {
+            await deleteDoc(doc(db, "itemsToBuy", docSnapshot.data().name));
+          });
         }}
       >
         ×
@@ -46,7 +65,7 @@ const MyRecipe = () => {
 
   useEffect(() => {
     checkDB();
-  }, [userRecipes.length, isLoggedIn]);
+  }, [userRecipes.length, isLoggedIn, itemsToBuy.length]);
 
   return (
     <div>
