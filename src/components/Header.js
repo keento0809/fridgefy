@@ -14,10 +14,9 @@ import {
 import { UserContext } from "../contexts/users_data";
 
 const Header = () => {
-  // const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const auth = getAuth();
-  const { setUserId, userInfo, setUserInfo, setUserRecipe, setUserFridge } =
+  const { userInfo, setUserInfo, setUserRecipes, setUserFridge } =
     useContext(UserContext);
   const { isLoggedIn, username } = userInfo;
 
@@ -29,7 +28,6 @@ const Header = () => {
         const token = credential.accessToken;
         const user = result.user;
         localStorage.setItem("token", user.uid);
-        // setUserName(user.displayName);
         setUserInfo({
           isLoggedIn: true,
           userId: user.uid,
@@ -50,7 +48,7 @@ const Header = () => {
       .then(() => {
         console.log("Logout succeeded");
         setUserInfo({ isLoggedIn: false, userId: "", username: "user" });
-        setUserRecipe([]);
+        setUserRecipes([]);
         setUserFridge([]);
       })
       .catch((error) => {

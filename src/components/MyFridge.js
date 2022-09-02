@@ -1,12 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/users_data";
 import axios from "axios";
+import { db } from "../firebase";
+import {
+  doc,
+  setDoc,
+  deleteDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 const MyFridge = () => {
   const { userFridge, setUserFridge, userInfo } = useContext(UserContext);
   const [ingredientsData, setIngredientsData] = useState([]);
   const [value, setValue] = useState("banana");
-  const { username } = userInfo;
+  const { username, userId, isLoggedIn } = userInfo;
 
   const getIngredientsData = (ingredient) => {
     axios
@@ -33,11 +43,16 @@ const MyFridge = () => {
     <div key={item.id}>
       <span>{item.name}</span>
       <button
-        onClick={() => {
+        onClick={async () => {
           setUserFridge([
             ...userFridge,
             { name: item.name, id: userFridge.length + 1 },
           ]);
+          await setDoc(doc(db, "fridges", item.name), {
+            id: userId,
+            name: item.name,
+          });
+          setValue("");
         }}
       >
         Add
@@ -45,18 +60,37 @@ const MyFridge = () => {
     </div>
   ));
 
-  const fridgeDataRender = userFridge.map((item) => (
-    <div key={item.id}>
+  const fridgeDataRender = userFridge.map((item, index) => (
+    <div key={index}>
       <span>{item.name}</span>
       <button
-        onClick={() => {
-          setUserFridge(userFridge.filter((data) => data.id !== item.id));
+        onClick={async () => {
+          setUserFridge(userFridge.filter((data) => data.name !== item.name));
+          await deleteDoc(doc(db, "fridges", item.name));
         }}
       >
         ×
       </button>
     </div>
   ));
+
+  useEffect(() => {
+    const checkDB = async () => {
+      const fridgeArr = [];
+      if (isLoggedIn) {
+        const q = query(
+          collection(db, "fridges"),
+          where("id", "==", `${userId}`)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          fridgeArr.push(doc.data());
+        });
+      }
+      setUserFridge(fridgeArr);
+    };
+    checkDB();
+  }, [isLoggedIn]);
 
   return (
     <div>
