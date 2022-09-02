@@ -15,6 +15,7 @@ import {
 const MyFridge = () => {
   const { userFridge, setUserFridge, userInfo } = useContext(UserContext);
   const [ingredientsData, setIngredientsData] = useState([]);
+  const [inputClassName, setInputClassName] = useState("")
   const [value, setValue] = useState("banana");
   const { username, userId, isLoggedIn } = userInfo;
 
@@ -92,14 +93,27 @@ const MyFridge = () => {
     checkDB();
   }, [isLoggedIn]);
 
+  const fridgeSearchHandler = (e) => {
+    let validationArr = e.target.value.split(/\s+/);
+    const hasDuplicate = arr => {
+      return new Set(arr).size !== arr.length;
+    }
+    if(hasDuplicate(validationArr)){
+      setInputClassName("input__style")
+    } else {
+      setValue(e.target.value)
+    }
+  }
+
   return (
-    <div>
+    <div　>
       <h2>Search food</h2>
       <input
+        className={inputClassName}
         type="search"
-        placeholder="search..."
+        placeholder="search ingredients"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={fridgeSearchHandler}
       />
       {filtered}
       <h2>{username}'s Fridge</h2>

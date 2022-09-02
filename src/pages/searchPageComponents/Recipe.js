@@ -41,7 +41,8 @@ const Recipe = ({ name, image, missedIngredients }) => {
       >
         Add
       </button>
-      {displayDetail ? <RecipeDetail /> : null}
+      { displayDetail ?
+        <RecipeDetail/> : null}
     </div>
   );
 };

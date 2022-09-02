@@ -52,6 +52,8 @@ const SearchMain = () => {
     />
   ));
 
+
+
   return (
     <main>
       <h2> Search Recipe</h2>
