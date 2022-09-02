@@ -75,21 +75,22 @@ const MyFridge = () => {
     </div>
   ));
 
+  const checkDB = async () => {
+    const fridgeArr = [];
+    if (isLoggedIn) {
+      const q = query(
+        collection(db, "fridges"),
+        where("id", "==", `${userId}`)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        fridgeArr.push(doc.data());
+      });
+    }
+    setUserFridge(fridgeArr);
+  };
+
   useEffect(() => {
-    const checkDB = async () => {
-      const fridgeArr = [];
-      if (isLoggedIn) {
-        const q = query(
-          collection(db, "fridges"),
-          where("id", "==", `${userId}`)
-        );
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          fridgeArr.push(doc.data());
-        });
-      }
-      setUserFridge(fridgeArr);
-    };
     checkDB();
   }, [isLoggedIn]);
 

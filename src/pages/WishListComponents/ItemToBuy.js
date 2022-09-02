@@ -1,19 +1,28 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/users_data";
+import { db } from "../../firebase";
+import {
+  deleteDoc,
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 const ItemToBuy = () => {
-  const { userFridge, userRecipes, userInfo } = useContext(UserContext);
-  const { isLoggedIn } = userInfo;
-  const [itemsToBuyList, setItemsToBuyList] = useState([]);
+  const { userRecipes, userInfo, itemsToBuy, setItemsToBuy, bool, setBool } =
+    useContext(UserContext);
+  const { isLoggedIn, userId } = userInfo;
 
-  const itemsToBuyRender = itemsToBuyList.map((item, index) => (
+  const itemsToBuyRender = itemsToBuy.map((item, index) => (
     <div key={index}>
-      <span>{item}</span>
+      <span>{item.name}</span>
       <button
         onClick={async () => {
-          setItemsToBuyList(itemsToBuyList.filter((data) => data !== item));
-          // await deleteDoc(doc(db, "itemsToBuy", item));
+          setItemsToBuy(itemsToBuy.filter((data) => data.name !== item.name));
+          await deleteDoc(doc(db, "itemsToBuy", item.name));
         }}
       >
         ×
@@ -21,18 +30,25 @@ const ItemToBuy = () => {
     </div>
   ));
 
-  useEffect(() => {
+  const checkDB = async () => {
     if (isLoggedIn) {
-      console.log(userRecipes);
-      const updateArr = [];
-      for (const obj of userRecipes) {
-        obj.missedIngredients.forEach((ingredient) => {
-          updateArr.push(ingredient.name);
-        });
-      }
-      setItemsToBuyList(updateArr);
+      const itemsToBuyArr = [];
+      const q = query(
+        collection(db, "itemsToBuy"),
+        where("id", "==", `${userId}`)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        itemsToBuyArr.push(doc.data());
+      });
+      setItemsToBuy(itemsToBuyArr);
     }
-  }, [isLoggedIn, userRecipes.length]);
+  };
+
+  useEffect(() => {
+    !bool && checkDB();
+    setBool(false);
+  }, [isLoggedIn, itemsToBuy.length]);
 
   return (
     <div>

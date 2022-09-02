@@ -33,9 +33,6 @@ const SearchMain = () => {
         })
         .join(",");
     ingredientsArr = ingredientsArr.slice(0, ingredientsArr.length - 2);
-    console.log(ingredientsArr);
-    // original
-    // getRecipeData(value);
     getRecipeData(ingredientsArr);
     const filteredItems = recipeData.filter(
       (item) => item.title.toLowerCase().indexOf(value) !== -1
@@ -46,13 +43,12 @@ const SearchMain = () => {
   const recipesRender = recipeData.map((item) => (
     <Recipe
       key={item.id}
+      id={item.id}
       name={item.title}
       image={item.image}
       missedIngredients={item.missedIngredients}
     />
   ));
-
-
 
   return (
     <main>
