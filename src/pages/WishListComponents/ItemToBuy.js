@@ -15,14 +15,17 @@ const ItemToBuy = () => {
   const { userRecipes, userInfo, itemsToBuy, setItemsToBuy, bool, setBool } =
     useContext(UserContext);
   const { isLoggedIn, userId } = userInfo;
+  const [isLoading, setIsLoading] = useState(false);
 
   const itemsToBuyRender = itemsToBuy.map((item, index) => (
     <div key={index}>
       <span>{item.name}</span>
       <button
         onClick={async () => {
+          setIsLoading(true);
           setItemsToBuy(itemsToBuy.filter((data) => data.name !== item.name));
           await deleteDoc(doc(db, "itemsToBuy", item.name));
+          setIsLoading(false);
         }}
       >
         ×
@@ -53,7 +56,8 @@ const ItemToBuy = () => {
   return (
     <div>
       <h2>Item to Buy</h2>
-      {itemsToBuyRender}
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && <div className="">{itemsToBuyRender}</div>}
     </div>
   );
 };
