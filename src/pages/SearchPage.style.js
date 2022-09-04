@@ -17,3 +17,19 @@ export const PageContainer = styled.section`
     margin: 0 2rem;
   }
 `
+
+export const FridgeStyle = styled.div`
+  
+  .input__style{
+    position: relative;
+  }
+  
+  .input__style::before {
+    content: "Invalid Search";
+    color: red;
+    position: absolute;
+    font-size:12px;
+    top: 2rem;
+  }
+
+`
