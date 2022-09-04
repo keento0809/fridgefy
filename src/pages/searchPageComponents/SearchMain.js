@@ -13,7 +13,6 @@ const SearchMain = () => {
   const getRecipeData = (ingredients) => {
     axios
       .get(
-        // `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${process.env.REACT_APP_API_KEY_SPOONACULAR}&ingredients=${ingredients}`
         `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${process.env.REACT_APP_API_KEY_SPOONACULAR}&ingredients=${ingredients}`
       )
       .then((res) => {

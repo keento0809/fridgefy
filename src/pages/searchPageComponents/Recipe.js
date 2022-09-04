@@ -10,9 +10,6 @@ const Recipe = ({ id, name, image, missedIngredients }) => {
   const { userRecipes, setUserRecipes, userInfo, setItemsToBuy } =
     useContext(UserContext);
   const { userId, isLoggedIn } = userInfo;
-  const displayModal = () => {
-    setDisplayDetail(!displayDetail);
-  };
 
   const addMyRecipe = async (item) => {
     setUserRecipes([
@@ -48,15 +45,20 @@ const Recipe = ({ id, name, image, missedIngredients }) => {
     <div>
       <h4>{name}</h4>
       <img src={image} style={{ width: "20rem" }} alt="" />
-      <button onClick={displayModal}>More</button>
+      <button onClick={() => {setDisplayDetail(!displayDetail)}}>More</button>
       <button
         onClick={() => addMyRecipe({ id, name, image, missedIngredients })}
         disabled={!isLoggedIn || isClicked}
       >
         Add
       </button>
-      { displayDetail ?
-        <RecipeDetail/> : null}
+      { displayDetail ? < RecipeDetail
+        setDisplayDetail={setDisplayDetail}
+        displayDetail={displayDetail}
+        name={name}
+        image={image}
+        id={id}
+      /> : null }
     </div>
   );
 };

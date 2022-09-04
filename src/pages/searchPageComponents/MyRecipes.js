@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/users_data";
 import {
   collection,
@@ -20,6 +20,7 @@ const MyRecipe = () => {
     setBool,
   } = useContext(UserContext);
   const { userId, username, isLoggedIn } = userInfo;
+  const [isLoading, setIsLoading] = useState(false);
 
   const myRecipeRender = userRecipes.map((item, index) => (
     <div key={index}>
@@ -27,6 +28,7 @@ const MyRecipe = () => {
       <img src={item.image} alt="" />
       <button
         onClick={async () => {
+          setIsLoading(true);
           setBool(true);
           setUserRecipes(userRecipes.filter((data) => data.id !== item.id));
           setItemsToBuy(
@@ -41,6 +43,7 @@ const MyRecipe = () => {
           querySnapshot.forEach(async (docSnapshot) => {
             await deleteDoc(doc(db, "itemsToBuy", docSnapshot.data().name));
           });
+          setIsLoading(false);
         }}
       >
         ×
@@ -70,7 +73,8 @@ const MyRecipe = () => {
   return (
     <div>
       <h2>{username}'s Recipes</h2>
-      {myRecipeRender}
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && <div>{myRecipeRender}</div>}
     </div>
   );
 };
