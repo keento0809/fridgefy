@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../contexts/users_data";
+import React, {useContext, useEffect, useState} from "react";
+import {UserContext} from "../contexts/users_data";
 import axios from "axios";
-import { db } from "../firebase";
+import {db} from "../firebase";
 import {
   doc,
   setDoc,
@@ -11,12 +11,14 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import {FridgeStyle} from "../pages/SearchPage.style";
 
 const MyFridge = () => {
-  const { userFridge, setUserFridge, userInfo } = useContext(UserContext);
+  const {userFridge, setUserFridge, userInfo} = useContext(UserContext);
   const [ingredientsData, setIngredientsData] = useState([]);
+  const [inputClassName, setInputClassName] = useState("")
   const [value, setValue] = useState("banana");
-  const { username, userId, isLoggedIn } = userInfo;
+  const {username, userId, isLoggedIn} = userInfo;
 
   const getIngredientsData = (ingredient) => {
     axios
@@ -46,7 +48,7 @@ const MyFridge = () => {
         onClick={async () => {
           setUserFridge([
             ...userFridge,
-            { name: item.name, id: userFridge.length + 1 },
+            {name: item.name, id: userFridge.length + 1},
           ]);
           await setDoc(doc(db, "fridges", item.name), {
             id: userId,
@@ -93,15 +95,31 @@ const MyFridge = () => {
     checkDB();
   }, [isLoggedIn]);
 
+  const fridgeSearchHandler = (e) => {
+    let validationArr = e.target.value.split(/\s+/);
+    const hasDuplicate = arr => {
+      return new Set(arr).size !== arr.length;
+    }
+    if (hasDuplicate(validationArr)) {
+      setInputClassName("input__style")
+      console.log(inputClassName)
+    } else {
+      setInputClassName("")
+      setValue(e.target.value)
+    }
+  }
+
   return (
     <div>
-      <h2>Search food</h2>
-      <input
-        type="search"
-        placeholder="search..."
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <FridgeStyle>
+        <h2 className={inputClassName}>Search food</h2>
+        <input
+          type="search"
+          placeholder="search ingredients"
+          value={value}
+          onChange={fridgeSearchHandler}
+        />
+      </FridgeStyle>
       {filtered}
       <h2>{username}'s Fridge</h2>
       {fridgeDataRender}
