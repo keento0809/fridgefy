@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/users_data";
+import styled from "styled-components";
 import {
   collection,
   query,
@@ -23,7 +24,8 @@ const MyRecipe = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const myRecipeRender = userRecipes.map((item, index) => (
-    <div key={index}>
+    <MyRecipeStyle>
+    <div key={index} className="container">
       <h4>{item.name}</h4>
       <img src={item.image} alt="" />
       <button
@@ -49,6 +51,7 @@ const MyRecipe = () => {
         ×
       </button>
     </div>
+    </MyRecipeStyle>
   ));
 
   const checkDB = async () => {
@@ -79,4 +82,20 @@ const MyRecipe = () => {
   );
 };
 
+const MyRecipeStyle = styled.div`
+.container{
+  width: 40%;
+  text-align: center;
+  font-family: 'Inconsolata', monospace;
+  height: 500px;
+  background-color: #4D99A3;
+}
+h2{
+  
+  text-align: center;
+  
+
+}
+
+`;
 export default MyRecipe;

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Recipe from "./Recipe";
 import axios from "axios";
 import { UserContext } from "../../contexts/users_data";
+import styled from "styled-components";
 
 const SearchMain = () => {
   const [recipeData, setRecipeData] = useState([]);
@@ -50,7 +51,8 @@ const SearchMain = () => {
   ));
 
   return (
-    <main>
+    <div>
+      
       <h2> Search Recipe</h2>
       <input
         type="search"
@@ -61,8 +63,12 @@ const SearchMain = () => {
       />
       <h2>All Recipes</h2>
       {recipesRender}
-    </main>
+      
+    </div>
+    
   );
 };
+
+
 
 export default SearchMain;

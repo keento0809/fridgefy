@@ -110,8 +110,8 @@ const MyFridge = () => {
   }
 
   return (
+    <FridgeStyle>
     <div>
-      <FridgeStyle>
         <h2 className={inputClassName}>Search food</h2>
         <input
           type="search"
@@ -119,12 +119,15 @@ const MyFridge = () => {
           value={value}
           onChange={fridgeSearchHandler}
         />
-      </FridgeStyle>
+      
       {filtered}
       <h2>{username}'s Fridge</h2>
       {fridgeDataRender}
     </div>
+    </FridgeStyle>
   );
 };
+
+
 
 export default MyFridge;

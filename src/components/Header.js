@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import styled from "styled-components";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { NavBarStyle } from "../pages/SearchPage.style";
 import googleLogin from "../helper/googleLogin";
@@ -68,8 +69,9 @@ const Header = () => {
 
   return (
     <NavBarStyle>
-      <Link to="/">
-        <h1>Fridgefy</h1>
+      <div>
+      <Link to="/" className="link-fridgefy" >
+        <h1>FRIDGEFY</h1>
       </Link>
       <ul>
         <li>
@@ -78,8 +80,12 @@ const Header = () => {
         <li>Hello {username}</li>
         {isLoggedIn ? logOutButton : loginButton}
       </ul>
+      </div>
     </NavBarStyle>
   );
 };
+
+
+
 
 export default Header;
